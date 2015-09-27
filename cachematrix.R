@@ -11,10 +11,11 @@ makeCacheMatrix <- function(x = matrix())
     m <- NULL
     set <- function(y)
     {
-        
+        ## assign values external to current environment
         x <<- y
         m <<- NULL
     }
+    ## getters and setters
     getMatrix <- function() x
     setMatrixInv <- function(solve) m <<- solve
     getMatrixInv <- function() m
@@ -33,7 +34,8 @@ cacheSolve <- function(x, ...)
         message("retrieving matrix")
         return(m)
     }
-    ## calc inverse
+    ## if no cached solution, calculate inverse
+    message("calculating inverse")
     cachedMatrix <- x$getMatrix()
     m <- solve(cachedMatrix, ...)
     x$setMatrixInv(m)
