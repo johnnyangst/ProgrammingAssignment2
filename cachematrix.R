@@ -5,39 +5,41 @@
 ## 1) create a workable matrix that can be cahed to memory 
 ## 2) return the inverse of the cached matrix
 
-## the makeCacheMatrix function will take a matrix and cache it to memory
+## the makeCacheMatrix function will take a matrix and cache it
 makeCacheMatrix <- function(x = matrix()) 
 {
-    m <- NULL
+    ## initialize inverse
+    inv <- NULL
+    ## getters and setters
     set <- function(y)
     {
         ## assign values external to current environment
         x <<- y
-        m <<- NULL
+        inv <<- NULL
     }
-    ## getters and setters
-    getMatrix <- function() x
-    setMatrixInv <- function(solve) m <<- solve
-    getMatrixInv <- function() m
+    get <- function() x
+    setMatrixInv <- function(inverse) inv <<- inverse
+    getMatrixInv <- function() inv
     list(set=set, get=get, setMatrixInv=setMatrixInv,getMatrixInv=getMatrixInv)
 }
 
 
-## the cacheSolve function will take the cached matrix and invert it
+## the cacheSolve function will look for cached inverse and print it.  If it's not found,
+## it will take the cached matrix, invert it and set the cached value to the inverse.
 cacheSolve <- function(x, ...) 
 {
     ## Return a matrix that is the inverse of 'x'
-    m <- x$getMatrixInv()
+    inv <- x$getMatrixInv()
     ## has inverse been calculated? look for cached matrix
-    if (!is.null(m))
+    if (!is.null(inv))
     {
-        message("retrieving matrix")
-        return(m)
+        message("retrieving cached matrix")
+        return(inv)
     }
     ## if no cached solution, calculate inverse
     message("calculating inverse")
-    cachedMatrix <- x$getMatrix()
-    m <- solve(cachedMatrix, ...)
-    x$setMatrixInv(m)
-    return(m)
+    data <- x$get()
+    inv <- solve(data, ...)
+    x$setMatrixInv(inv)
+    inv
 }
